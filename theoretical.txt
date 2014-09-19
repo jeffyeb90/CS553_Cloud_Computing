@@ -1,0 +1,5 @@
+CPU: GHz*IPC*Cores ; IPC can be found online if you search for instructions per cycle
+RAM: see http://en.wikipedia.org/wiki/DDR3_SDRAM
+GPU: there are Wikipedia articles that give you the peak flops and IOPS
+Disk: manufacturer typically has sustained read/write, and latency data
+Network: Since you are testing loopback, use your RAM speed to be your upper bound
