@@ -8,11 +8,15 @@
 #include <string.h>
 
 #ifndef BSIZE
-#    define BSIZE 1000
+#    define BSIZE 1024
 #endif
 
 #ifndef TSIZE
 #    define TSIZE 2000000000
+#endif
+
+#ifndef NTIME
+#   define NTIME 500
 #endif
 
 double getCurrentTime()
@@ -26,43 +30,67 @@ double getCurrentTime()
     return ( (double) tp.tv_sec + (double) tp.tv_usec * 1.e-6 );
 }
 
+
 int main()
 {
-    void *source = malloc(TSIZE);
-    void *dest = malloc(TSIZE);
+    int timeToRun = 0;
 
-//    printf("source begins at %p\n", source);
-//    printf("dest begins at %p\n", dest);
-
-    void *soffset;
-    void *doffset;
-
-    int i;
+    double interval = 0.0;    
 
     double before;
     double after;
-    double interval;
 
-    soffset = source;
-    doffset = dest;
 
-    before = getCurrentTime();
-
-    for(i = 0; i < TSIZE/BSIZE; i++)
+    while (timeToRun < NTIME)
     {
-//	printf("copying %d data from %p to %p\n", BSIZE, soffset, doffset);
-	memcpy(soffset, doffset, BSIZE);
-	soffset += BSIZE;
-	doffset += BSIZE;
+        #pragma omp parallel
+        {
+
+            int myTSIZE = TSIZE / omp_get_num_threads();
+
+            void *source = malloc(myTSIZE);
+            void *dest = malloc(myTSIZE);
+
+            void *soffset;
+            void *doffset;
+
+            int i;
+
+            soffset = source;
+            doffset = dest;
+
+            #pragma omp barrier
+
+            #pragma omp master
+            {
+                before = getCurrentTime();
+            }
+
+            for(i = 0; i < myTSIZE/BSIZE/100; i++)
+            {
+                memcpy(doffset, soffset, BSIZE);
+                soffset += (BSIZE+65);
+                doffset += (BSIZE+65);
+            }
+
+            #pragma omp barrier
+
+            #pragma omp master
+            {
+                after = getCurrentTime();
+                interval = interval + (after - before);
+            }
+
+            free(source);
+            free(dest);
+        }
+
+        timeToRun++;
     }
-
-    after = getCurrentTime();
-
-    interval = after - before;
 
     printf("time intverval is %f\n", interval);
 
-    printf("the throughput is %f MB/s.\n", (double)TSIZE / interval / 1000000.00);
+    printf("the throughput is %f MB/s.\n", (double)TSIZE * NTIME / 100 / interval / 1000000);
 
     return 0;
 }

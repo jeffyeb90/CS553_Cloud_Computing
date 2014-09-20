@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <math.h>
+#include <float.h>
+#include <limits.h>
+#include <sys/time.h>
+#include <string.h>
+
+#ifndef BSIZE
+#    define BSIZE 1000000000
+#endif
+
+#ifndef TSIZE
+#    define TSIZE 1000000000
+#endif
+
+#ifndef NTIME
+#   define NTIME 100
+#endif
+
+double getCurrentTime()
+{
+    struct timeval tp;
+    struct timezone tzp;
+    int i;
+
+    i = gettimeofday(&tp,&tzp);
+
+    return ( (double) tp.tv_sec + (double) tp.tv_usec * 1.e-6 );
+}
+
