@@ -35,14 +35,14 @@ int main()
 
         int seq;
 
-        char *str = "%d threads, %s, %s block size, have throughput %f MB/s.\n";
+        char *str = "%d threads, %s, %s block size, have throughput %f MB/s, latency %f ns.\n";
 
-	const char *fileString[4];
+    	const char *fileString[4];
 
-	fileString[0] = "file 0";
-	fileString[1] = "file 1";
-	fileString[2] = "file 2";
-	fileString[3] = "file 3";
+    	fileString[0] = "file 0";
+    	fileString[1] = "file 1";
+    	fileString[2] = "file 2";
+    	fileString[3] = "file 3";
 
         for(type = 0; type < 18; type++)
         {
@@ -82,14 +82,14 @@ int main()
                 else if(type % 3 == 1)
                 {
                         blockSize = 1000;
-                        totalSize = 1000000000;
+                        totalSize = 2000000000;
                         sizeString = "1 KByte";
                         NTIME = 10;
                 }
                 else
                 {
                         blockSize = 1000000;
-                        totalSize = 100000000;
+                        totalSize = 2000000000;
 			            sizeString = "1 MByte";
 			            NTIME = 50;
 		        }
@@ -101,7 +101,7 @@ int main()
                 double before;
                 double after;
 
-                //NTIME = 1;
+                NTIME = 1;
 
 
                 while (timeToRun < NTIME)
@@ -137,14 +137,14 @@ int main()
                                         if (seq == 0)
                                         {
                                                 randNumber = rand() % mySize;
-                                                while(randNumber > mySize - blockSize)
+                                                if(randNumber > mySize - blockSize)
                                                 {
-                                                        randNumber = rand() % mySize;
+                                                        randNumber -= blockSize;
                                                 }
 						                        fseek(fp, randNumber, SEEK_SET);
                                         }
                                     
-                                        offset++;
+                                        offset += blockSize;
                                        
                                 }
 
@@ -163,9 +163,11 @@ int main()
                         timeToRun++;
                 }
 
-                printf("time intverval is %f\n", interval);
+                //printf("time intverval is %f\n", interval);
 
-                printf(str, numThreads, seqString, sizeString, (double)totalSize * NTIME / interval / 1000000);
+                printf(str, numThreads, seqString, sizeString, 
+                    ((double)totalSize * NTIME / interval / 1000000),
+                    ((double)interval * 1000000000 / totalSize / NTIME));
               
         }
 

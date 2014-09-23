@@ -158,7 +158,7 @@ int main()
         		timeToRun++;
     		}
 
-    		printf("time intverval is %f\n", interval);
+    		//printf("time intverval is %f\n", interval);
 
     		printf(str, numThreads, seqString, sizeString, 
     				((double)totalSize * NTIME / interval / 1000000),
