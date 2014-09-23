@@ -21,9 +21,10 @@ double getCurrentTime()
 int main()
 {	
 	struct timeval seed;
-    	int i = gettimeofday(&seed, NULL);
+    	
+    int i = gettimeofday(&seed, NULL);
 
-    	srand(seed.tv_usec);
+    srand(seed.tv_usec);
 
 	int blockSize;
 	int totalSize;
@@ -34,7 +35,7 @@ int main()
 
 	int seq;
 
-	char *str = "%d threads, %s, %s block size, have throughput %f MB/s.\n";
+	char *str = "%d threads, %s, %s block size, have throughput %f MB/s, latency %f ns.\n";
 	
 
 	for(type = 0; type < 12; type++)
@@ -115,7 +116,7 @@ int main()
 
             			#pragma omp master
             			{
-					numThreads = omp_get_num_threads(); 
+							numThreads = omp_get_num_threads(); 
 				
                				before = getCurrentTime();
             			}
@@ -125,21 +126,21 @@ int main()
 					
                		 		memcpy(doffset, soffset, blockSize);
 					
-					if (seq == 0)
-					{
-						randNumber = rand() % mySize;
-						while(randNumber > mySize - blockSize)
-						{
-							randNumber = rand() % mySize;
-						}
-						soffset = source + randNumber;
-						doffset = dest + randNumber;	
-					}
-					else
-					{
-						soffset += blockSize;
-						doffset += blockSize;
-					}
+							if (seq == 0)
+							{
+								randNumber = rand() % mySize;
+								if (randNumber > mySize - blockSize)
+								{
+									randNumber -= blockSize;
+								}
+								soffset = source + randNumber;
+								doffset = dest + randNumber;	
+							}
+							else
+							{
+								soffset += blockSize;
+								doffset += blockSize;
+							}
             			}
 
             			#pragma omp barrier
@@ -159,7 +160,9 @@ int main()
 
     		printf("time intverval is %f\n", interval);
 
-    		printf(str, numThreads, seqString, sizeString, (double)totalSize * NTIME / interval / 1000000);
+    		printf(str, numThreads, seqString, sizeString, 
+    				((double)totalSize * NTIME / interval / 1000000),
+    				((double)interval * 1000000000 / totalSize / NTIME));
 		sleep(3);
 	}
 
