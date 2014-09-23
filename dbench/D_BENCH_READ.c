@@ -50,7 +50,7 @@ int main()
 	{
 		void *p = malloc(1000000000);
 		FILE *f = fopen(fileString[j], "w");
-		fwrite(p, 1000, 1000000, f);
+		fwrite(p, 2000, 1000000, f);
 		fclose(f);
 		free(p);
 	}
@@ -69,7 +69,7 @@ int main()
                 else
                         omp_set_num_threads(4);
 
-		if( (type < 3)||(type >= 6 && type < 9) || (type >= 12 && type <15))
+		        if( (type < 3)||(type >= 6 && type < 9) || (type >= 12 && type <15))
                 {
                         seq = 1;
                         seqString = "sequential";
@@ -86,20 +86,20 @@ int main()
                         blockSize = 1;
                         totalSize = 1000000;
                         sizeString = "1 Byte";
-                        NTIME = 30;
+                        NTIME = 10;
                 }
 
                 else if(type % 3 == 1)
                 {
                         blockSize = 1000;
-                        totalSize = 100000000;
+                        totalSize = 2000000000;
                         sizeString = "1 KByte";
-                        NTIME = 50;
+                        NTIME = 20;
                 }
                 else
                 {
                         blockSize = 1000000;
-                        totalSize = 1000000000;
+                        totalSize = 2000000000;
                         sizeString = "1 MByte";
                         NTIME = 50;
                 }
@@ -110,6 +110,8 @@ int main()
 
                 double before;
                 double after;
+
+                NTIME = 1;
 
 
                 while (timeToRun < NTIME)
@@ -129,18 +131,18 @@ int main()
 
                                 int i;
 
-				#pragma omp barrier
+				                #pragma omp barrier
 
                                 #pragma omp master
-			        {
+			                    {
                                         numThreads = omp_get_num_threads();
 
                                         before = getCurrentTime();
                                 }
 
-                                for(i = 0; i < mySize / blockSize; i++)
+                                for(i = 0; i < mySize / (blockSize*20); i++)
                                 {
-                                        fread(offset, blockSize, 1, fp);
+                                        fread(offset, blockSize, 20, fp);
 
                                         if (seq == 0)
                                         {
@@ -152,8 +154,7 @@ int main()
                                                 fseek(fp, randNumber, SEEK_SET);
                                         }
 
-                                        offset++;
-
+                                        offset = offset + (blockSize*20);
                                 }
 
                                 #pragma omp barrier
@@ -162,6 +163,7 @@ int main()
                                 {
                                         after = getCurrentTime();
                                         interval = interval + (after - before);
+                                        printf("this round used %f seconds\n", after - before);
                                 }
 
                                 free(pointer);
@@ -175,6 +177,7 @@ int main()
 
                 printf(str, numThreads, seqString, sizeString, (double)totalSize * NTIME / interval / 1000000);
 
+                sleep(3);
         }
 
         return 0;

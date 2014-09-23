@@ -55,8 +55,8 @@ int main()
                         omp_set_num_threads(1);
                 else if ((type >= 6) && (type < 12))
                         omp_set_num_threads(2);
-		else
-			omp_set_num_threads(4);
+        		else
+        			omp_set_num_threads(4);
 
 
                 if( (type < 3)||(type >= 6 && type < 9) || (type >= 12 && type <15))
@@ -82,7 +82,7 @@ int main()
                 else if(type % 3 == 1)
                 {
                         blockSize = 1000;
-                        totalSize = 100000000;
+                        totalSize = 1000000000;
                         sizeString = "1 KByte";
                         NTIME = 10;
                 }
@@ -90,16 +90,18 @@ int main()
                 {
                         blockSize = 1000000;
                         totalSize = 100000000;
-			sizeString = "1 MByte";
-			NTIME = 20;
-		}
+			            sizeString = "1 MByte";
+			            NTIME = 50;
+		        }
 
-	        int timeToRun = 0;
+	            int timeToRun = 0;
 
                 double interval = 0.0;
 
                 double before;
                 double after;
+
+                //NTIME = 1;
 
 
                 while (timeToRun < NTIME)
@@ -107,7 +109,7 @@ int main()
                         #pragma omp parallel
                         {
 
-				FILE *fp = fopen(fileString[omp_get_thread_num()], "w");
+				                FILE *fp = fopen(fileString[omp_get_thread_num()], "w");
 			
                                 int randNumber;
 
@@ -130,7 +132,7 @@ int main()
 
                                 for(i = 0; i < mySize / blockSize; i++)
                                 {
-					fwrite(offset, blockSize, 1, fp);
+					                    fwrite(offset, blockSize, 1, fp);
 
                                         if (seq == 0)
                                         {
@@ -139,7 +141,7 @@ int main()
                                                 {
                                                         randNumber = rand() % mySize;
                                                 }
-						fseek(fp, randNumber, SEEK_SET);
+						                        fseek(fp, randNumber, SEEK_SET);
                                         }
                                     
                                         offset++;
