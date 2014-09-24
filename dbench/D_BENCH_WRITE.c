@@ -27,16 +27,17 @@ int main()
         srand(seed.tv_usec);
 
         int blockSize;
-        int totalSize;
+        int totalSize;      //total size of one iteration of disk writing
 
-        int NTIME;
+        int NTIME;          //number of iteration
 
-        int type;
+        int type;           //type stands for different parameter combination
 
-        int seq;
+        int seq;            //if this is a sequential access
 
         char *str = "%d threads, %s, %s block size, have throughput %f MB/s, latency %f ns.\n";
 
+        //for each threads, there is a file to write to
     	const char *fileString[4];
 
     	fileString[0] = "file 0";
@@ -46,17 +47,17 @@ int main()
 
         for(type = 0; type < 18; type++)
         {
-                int numThreads;
+                int numThreads;     //number of threads
                 char *seqString;
                 char *sizeString;
 
 
                 if(type < 6)
-                        omp_set_num_threads(1);
+                        omp_set_num_threads(1);         //1 thread
                 else if ((type >= 6) && (type < 12))
-                        omp_set_num_threads(2);
+                        omp_set_num_threads(2);         //2 threads
         		else
-        			omp_set_num_threads(4);
+        			omp_set_num_threads(4);             //4 threads
 
 
                 if( (type < 3)||(type >= 6 && type < 9) || (type >= 12 && type <15))
@@ -73,22 +74,22 @@ int main()
 
                 if(type % 3 == 0)
                 {
-                        blockSize = 1;
-                        totalSize = 1000000;
+                        blockSize = 1;      //block size is 1 byte
+                        totalSize = 1000000;    
                         sizeString = "1 Byte";
                         NTIME = 10;
                 }
 
                 else if(type % 3 == 1)
                 {
-                        blockSize = 1000;
+                        blockSize = 1000;       //block size is 1 Kbyte
                         totalSize = 2000000000;
                         sizeString = "1 KByte";
                         NTIME = 10;
                 }
                 else
                 {
-                        blockSize = 1000000;
+                        blockSize = 1000000;      //block size is 1 Mbyte
                         totalSize = 2000000000;
 			            sizeString = "1 MByte";
 			            NTIME = 50;
@@ -98,46 +99,46 @@ int main()
 
                 double interval = 0.0;
 
-                double before;
-                double after;
+                double before;      //beginning time
+                double after;       //ending time
 
                 NTIME = 1;
 
 
                 while (timeToRun < NTIME)
                 {
-                        #pragma omp parallel
+                        #pragma omp parallel    //running in parallel using open mp
                         {
 
 				                FILE *fp = fopen(fileString[omp_get_thread_num()], "w");
 			
                                 int randNumber;
 
-                                int mySize = totalSize / omp_get_num_threads();
+                                int mySize = totalSize / omp_get_num_threads();     //each thread is assigned a sub-size 
 
                                 void *pointer = malloc(mySize);
 
-                                void *offset = pointer;
+                                void *offset = pointer;         //offset of the memory, to write to the disk
 
                                 int i;
 
-                                #pragma omp barrier
+                                #pragma omp barrier             //make a barrier in order to record the beginning time
 
                                 #pragma omp master
                                 {
-                                        numThreads = omp_get_num_threads();
+                                        numThreads = omp_get_num_threads();    
 
-                                        before = getCurrentTime();
+                                        before = getCurrentTime();  //only master record the beginning time
                                 }
 
                                 for(i = 0; i < mySize / blockSize; i++)
                                 {
-					                    fwrite(offset, blockSize, 1, fp);
+					                    fwrite(offset, blockSize, 1, fp);  
 
-                                        if (seq == 0)
+                                        if (seq == 0)       // if it's random access
                                         {
                                                 randNumber = rand() % mySize;
-                                                if(randNumber > mySize - blockSize)
+                                                if(randNumber > mySize - blockSize)     //in case that the offset is at the tail
                                                 {
                                                         randNumber -= blockSize;
                                                 }
@@ -148,7 +149,7 @@ int main()
                                        
                                 }
 
-                                #pragma omp barrier
+                                #pragma omp barrier //make a barrier in order to record the ending time
 
                                 #pragma omp master
                                 {
@@ -166,8 +167,8 @@ int main()
                 //printf("time intverval is %f\n", interval);
 
                 printf(str, numThreads, seqString, sizeString, 
-                    ((double)totalSize * NTIME / interval / 1000000),
-                    ((double)interval * 1000000000 / totalSize / NTIME));
+                    ((double)totalSize * NTIME / interval / 1000000),           //print the throughput
+                    ((double)interval * 1000000000 / totalSize / NTIME));       //print the latency
               
         }
 

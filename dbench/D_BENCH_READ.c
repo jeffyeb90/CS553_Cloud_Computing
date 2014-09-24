@@ -27,17 +27,16 @@ int main()
 
         srand(seed.tv_usec);
 
-        int blockSize;
-        int totalSize;
+        int blockSize;      //size of a block      
+        int totalSize;      //total size of the disk file
 
-        //int NTIME;
+        int type;   //type stands for different combination of parameters
 
-        int type;
-
-        int seq;
+        int seq;    //if this is a sequentical access
 
         char *str = "%d threads, %s, %s block size, have throughput %f MB/s, latency %f ns.\n";
 
+        //multiple threads reading from different files
         const char *fileString[4];
 
         fileString[0] = "file 0";
@@ -49,7 +48,7 @@ int main()
 
         for(type = 0; type < 18; type++)
         {
-                int numThreads;
+                int numThreads;     //number of threads
                 char *seqString;
                 char *sizeString;
 
@@ -86,7 +85,7 @@ int main()
 
                 if(type % 3 == 0)
                 {
-                        blockSize = 1;
+                        blockSize = 1;              //block size is 1 byte
                         totalSize = 100000;
                         sizeString = "1 Byte";
                 }
@@ -94,7 +93,7 @@ int main()
                 else if(type % 3 == 1)
 
                 {
-                        blockSize = 1000;
+                        blockSize = 1000;           //block size is 1 Kbyte
                         totalSize = 500000000;
                         sizeString = "1 KByte";
                     
@@ -102,7 +101,7 @@ int main()
                 }
                 else
                 {
-                        blockSize = 1000000;
+                        blockSize = 1000000;        //block size is 1 Mbyte
                         totalSize = 500000000;
                         sizeString = "1 MByte";
                 }
@@ -111,7 +110,8 @@ int main()
 
                 int j;
 
-                
+                //first write a file to be read later
+
                 for(j = 0; j < numThreads; j++)
                 {
                     void *p = malloc(totalSize / numThreads);
@@ -125,9 +125,6 @@ int main()
                     free(p);
                 }
 
-
-                //printf("done writing\n");
-
                 int timeToRun = 0;
 
                 double interval = 0.0;
@@ -135,41 +132,39 @@ int main()
                 double before;
                 double after;
 
-                //NTIME = 1;
 
-
-                #pragma omp parallel
+                #pragma omp parallel        //run in parallel using open mp
                 {
 
                     FILE *fp = fopen(fileString[omp_get_thread_num()], "r");
 
                     int randNumber;
 
-                    int mySize = totalSize / omp_get_num_threads();
+                    int mySize = totalSize / omp_get_num_threads();     //each thread has a sub-size to read from disk
 
-                    void *pointer = malloc(totalSize);
+                    void *pointer = malloc(totalSize);                  //allocate a piece of memeory to store the read data
 
-                    void *offset = pointer;
+                    void *offset = pointer;                             
 
                     int i;
 
-                    #pragma omp barrier
+                    #pragma omp barrier     //make a barrier in order to record the beginning time.
 
                     #pragma omp master
                     {
                             if(numThreads != omp_get_num_threads())
                                 printf("error, wrong thureads number\n");
-                            before = getCurrentTime();
+                            before = getCurrentTime();              //only master records the time
                     }
 
                             for(i = 0; i < totalSize / blockSize; i++)
                             {
-                                fread(offset, blockSize, 1, fp);
+                                fread(offset, blockSize, 1, fp);        //for each time, read a block-size piece 
 
-                                if (seq == 0)
+                                if (seq == 0)   //if it's random access
                                 {
-                                    randNumber = rand() % mySize;
-                                    if(randNumber > mySize - blockSize)
+                                    randNumber = rand() % mySize;       //randomize the position of the file
+                                    if(randNumber > mySize - blockSize) //in case that the position is at the tail
                                     {
                                             randNumber -= blockSize;
                                     }
@@ -179,7 +174,7 @@ int main()
                                 offset = offset + blockSize;
                             }
 
-                            #pragma omp barrier
+                            #pragma omp barrier     //make a barrier to record the ending time.
 
                             #pragma omp master
                             {
@@ -196,8 +191,8 @@ int main()
                 //printf("time intverval is %f\n", interval);
 
                 printf(str, numThreads, seqString, sizeString, 
-                    ((double)totalSize / interval / 1000000),
-                    ((double)interval * 1000000000 / totalSize));
+                    ((double)totalSize / interval / 1000000),               //print the throughput
+                    ((double)interval * 1000000000 / totalSize));           //print the latency
 
                 sleep(2);
         }
