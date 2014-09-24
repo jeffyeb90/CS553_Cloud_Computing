@@ -95,7 +95,7 @@ int main()
 
                 {
                         blockSize = 1000;
-                        totalSize = 2000000000;
+                        totalSize = 500000000;
                         sizeString = "1 KByte";
                     
 
@@ -103,7 +103,7 @@ int main()
                 else
                 {
                         blockSize = 1000000;
-                        totalSize = 2000000000;
+                        totalSize = 500000000;
                         sizeString = "1 MByte";
                 }
 
@@ -125,7 +125,8 @@ int main()
                     free(p);
                 }
 
-                printf("done writing\n");
+
+                //printf("done writing\n");
 
                 int timeToRun = 0;
 
@@ -146,9 +147,9 @@ int main()
 
                     int mySize = totalSize / omp_get_num_threads();
 
-                    void *pointer = malloc(blockSize);
+                    void *pointer = malloc(totalSize);
 
-                    //void *offset = pointer;
+                    void *offset = pointer;
 
                     int i;
 
@@ -157,13 +158,13 @@ int main()
                     #pragma omp master
                     {
                             if(numThreads != omp_get_num_threads())
-                                printf("error!!!!!\n");
+                                printf("error, wrong thureads number\n");
                             before = getCurrentTime();
                     }
 
-                            for(i = 0; i < 1; i++)
+                            for(i = 0; i < totalSize / blockSize; i++)
                             {
-                                fread(pointer, blockSize, mySize / blockSize, fp);
+                                fread(offset, blockSize, 1, fp);
 
                                 if (seq == 0)
                                 {
@@ -175,7 +176,7 @@ int main()
                                     fseek(fp, randNumber, SEEK_SET);
                                 }
 
-                                //offset = offset + blockSize;
+                                offset = offset + blockSize;
                             }
 
                             #pragma omp barrier
@@ -192,7 +193,7 @@ int main()
                               
                 }
 
-                printf("time intverval is %f\n", interval);
+                //printf("time intverval is %f\n", interval);
 
                 printf(str, numThreads, seqString, sizeString, 
                     ((double)totalSize / interval / 1000000),
