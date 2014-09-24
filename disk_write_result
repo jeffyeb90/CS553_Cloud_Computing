@@ -1,0 +1,63 @@
+1 threads, sequential, 1 Byte block size, have throughput 33.525466 MB/s, latency 29.828072 ns.
+1 threads, sequential, 1 KByte block size, have throughput 144.845811 MB/s, latency 6.903893 ns.
+1 threads, sequential, 1 MByte block size, have throughput 147.275036 MB/s, latency 6.790017 ns.
+1 threads, random, 1 Byte block size, have throughput 0.753388 MB/s, latency 1327.337027 ns.
+1 threads, random, 1 KByte block size, have throughput 15.742330 MB/s, latency 63.522996 ns.
+1 threads, random, 1 MByte block size, have throughput 143.517825 MB/s, latency 6.967776 ns.
+2 threads, sequential, 1 Byte block size, have throughput 61.090697 MB/s, latency 16.369104 ns.
+2 threads, sequential, 1 KByte block size, have throughput 140.813051 MB/s, latency 7.101614 ns.
+2 threads, sequential, 1 MByte block size, have throughput 147.066306 MB/s, latency 6.799654 ns.
+2 threads, random, 1 Byte block size, have throughput 0.797813 MB/s, latency 1253.427029 ns.
+2 threads, random, 1 KByte block size, have throughput 12.560377 MB/s, latency 79.615447 ns.
+2 threads, random, 1 MByte block size, have throughput 106.018809 MB/s, latency 9.432289 ns.
+4 threads, sequential, 1 Byte block size, have throughput 55.322148 MB/s, latency 18.075943 ns.
+4 threads, sequential, 1 KByte block size, have throughput 119.456638 MB/s, latency 8.371238 ns.
+4 threads, sequential, 1 MByte block size, have throughput 123.634846 MB/s, latency 8.088335 ns.
+4 threads, random, 1 Byte block size, have throughput 1.036504 MB/s, latency 964.782000 ns.
+4 threads, random, 1 KByte block size, have throughput 9.638138 MB/s, latency 103.754476 ns.
+4 threads, random, 1 MByte block size, have throughput 112.367365 MB/s, latency 8.899381 ns.
+
+
+1 threads, sequential, 1 Byte block size, have throughput 33.020816 MB/s, latency 30.283928 ns.
+1 threads, sequential, 1 KByte block size, have throughput 177.039905 MB/s, latency 5.648444 ns.
+1 threads, sequential, 1 MByte block size, have throughput 187.811749 MB/s, latency 5.324481 ns.
+1 threads, random, 1 Byte block size, have throughput 0.490764 MB/s, latency 2037.639141 ns.
+1 threads, random, 1 KByte block size, have throughput 13.520422 MB/s, latency 73.962188 ns.
+1 threads, random, 1 MByte block size, have throughput 158.763386 MB/s, latency 6.298681 ns.
+2 threads, sequential, 1 Byte block size, have throughput 60.661296 MB/s, latency 16.484976 ns.
+2 threads, sequential, 1 KByte block size, have throughput 167.952114 MB/s, latency 5.954078 ns.
+2 threads, sequential, 1 MByte block size, have throughput 184.951274 MB/s, latency 5.406829 ns.
+2 threads, random, 1 Byte block size, have throughput 0.861035 MB/s, latency 1161.392927 ns.
+2 threads, random, 1 KByte block size, have throughput 6.155057 MB/s, latency 162.468027 ns.
+2 threads, random, 1 MByte block size, have throughput 156.247207 MB/s, latency 6.400114 ns.
+4 threads, sequential, 1 Byte block size, have throughput 73.855083 MB/s, latency 13.540030 ns.
+4 threads, sequential, 1 KByte block size, have throughput 179.096917 MB/s, latency 5.583569 ns.
+4 threads, sequential, 1 MByte block size, have throughput 140.266687 MB/s, latency 7.129277 ns.
+4 threads, random, 1 Byte block size, have throughput 1.094820 MB/s, latency 913.392067 ns.
+4 threads, random, 1 KByte block size, have throughput 11.957253 MB/s, latency 83.631251 ns.
+4 threads, random, 1 MByte block size, have throughput 118.845350 MB/s, latency 8.414296 ns.
+
+
+1 threads, sequential, 1 Byte block size, have throughput 31.216910 MB/s, latency 32.033920 ns.
+1 threads, sequential, 1 KByte block size, have throughput 144.887040 MB/s, latency 6.901929 ns.
+1 threads, sequential, 1 MByte block size, have throughput 147.504232 MB/s, latency 6.779467 ns.
+1 threads, random, 1 Byte block size, have throughput 1.212187 MB/s, latency 824.954987 ns.
+1 threads, random, 1 KByte block size, have throughput 17.627356 MB/s, latency 56.730006 ns.
+1 threads, random, 1 MByte block size, have throughput 164.357038 MB/s, latency 6.084315 ns.
+2 threads, sequential, 1 Byte block size, have throughput 64.507905 MB/s, latency 15.501976 ns.
+2 threads, sequential, 1 KByte block size, have throughput 152.249988 MB/s, latency 6.568145 ns.
+2 threads, sequential, 1 MByte block size, have throughput 149.958470 MB/s, latency 6.668513 ns.
+2 threads, random, 1 Byte block size, have throughput 1.664063 MB/s, latency 600.938797 ns.
+2 threads, random, 1 KByte block size, have throughput 16.559348 MB/s, latency 60.388852 ns.
+2 threads, random, 1 MByte block size, have throughput 173.037594 MB/s, latency 5.779091 ns.
+4 threads, sequential, 1 Byte block size, have throughput 62.563267 MB/s, latency 15.983820 ns.
+4 threads, sequential, 1 KByte block size, have throughput 149.474784 MB/s, latency 6.690092 ns.
+4 threads, sequential, 1 MByte block size, have throughput 150.463118 MB/s, latency 6.646147 ns.
+4 threads, random, 1 Byte block size, have throughput 2.346867 MB/s, latency 426.100016 ns.
+4 threads, random, 1 KByte block size, have throughput 16.316786 MB/s, latency 61.286580 ns.
+4 threads, random, 1 MByte block size, have throughput 165.390706 MB/s, latency 6.046289 ns.
+
+
+
+
+
