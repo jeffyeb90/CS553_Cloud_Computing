@@ -29,14 +29,12 @@ public class GcsSize extends HttpServlet {
 		{
 			elem += 1;
 			mb += result.getProperty("size").hashCode() / 1048576.0;
-			//res.getWriter().println("Entity key: " + result.getKey().getName() + "\n");
-				
+	
 		}
 		
-    	res.getWriter().println("The are " + elem + "files in GCS, with total size of " + mb + " MegaBytes.\n");
+		res.setContentType("text/plain");
 
-		
-    	
+    	res.getWriter().println("The are " + elem + "files in GCS, with total size of " + mb + " MegaBytes.\n");    	
     }
 }
 

@@ -19,8 +19,10 @@ public class RemoveAllCache extends HttpServlet {
     	 	
     	memcacheService.clearAll();
     	
-    	res.getWriter().println("Cache is all cleared");
+		res.setContentType("text/plain");
     	
+    	res.getWriter().println("Cache is all cleared");
+   	
     }
 }
 

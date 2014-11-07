@@ -33,20 +33,21 @@ public class Remove extends HttpServlet {
     	
     	Filter filter = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey("MyFile", str));
     	
-    	Query q = new Query("MyFile").setFilter(filter);
+    	Query q = new Query("MyFile").setFilter(filter).setKeysOnly();
     	
     	PreparedQuery pq = datastoreService.prepare(q);
     	
     	Entity en = pq.asSingleEntity();
     	
-    				
+		res.setContentType("text/plain");
+			
     	
     	if(en != null)
     	{
-    		res.getWriter().println("This key exist, and its appid is" + en.getAppId());
+    		res.getWriter().println("This key exist");
     		
     		/////////////////////First, delete it in GCS///////////////////////
-			GcsFilename gcsName = new GcsFilename("qualified-cacao-745.appspot.com", en.getProperty("GCSkey").toString());
+			GcsFilename gcsName = new GcsFilename("qualified-cacao-745.appspot.com", str);
 			
     		boolean deletedGCS = gcsService.delete(gcsName);
     		
@@ -65,23 +66,7 @@ public class Remove extends HttpServlet {
     		
     		res.getWriter().println("deleted in Datastore");
     		
-    		
-    		
-    		//////////////////////////Then, delete it in BlobStore/////////////////////
-    		
-    		
-    		//Problem: blobstore key is different than str, or gcs key
-    		/*
-    		BlobKey blobKey = new BlobKey(str);
-    		blobstoreService.delete(blobKey);
-    		
-    		res.getWriter().println("deleted in Blobstore");
-    		*/
-    		
-    		
-    		
-    		
-    		
+
     		//////////////////////////////Finally, delete it in Memcache, if exists/////////
     		if(memcacheService.contains(str))
     		{

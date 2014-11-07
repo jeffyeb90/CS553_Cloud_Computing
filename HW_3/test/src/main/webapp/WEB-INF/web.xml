@@ -6,11 +6,6 @@
    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
   <servlet>
-    <servlet-name>Upload</servlet-name>
-    <servlet-class>com.google.test.Upload</servlet-class>
-  </servlet>
-  
-  <servlet>
     <servlet-name>List</servlet-name>
     <servlet-class>com.google.test.List</servlet-class>
   </servlet>
@@ -50,14 +45,30 @@
     <servlet-class>com.google.test.GcsSize</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>FindInFile</servlet-name>
+    <servlet-class>com.google.test.FindInFile</servlet-class>
+  </servlet>
   
-
+  <servlet>
+    <servlet-name>ListRegex</servlet-name>
+    <servlet-class>com.google.test.ListRegex</servlet-class>
+  </servlet>
+  
+<!--\\\\\\\\\\\\Dingwen's servlet mapping\\\\\\\\\\\\\\\\\\\\\\\\\-->
+  <servlet>
+    <servlet-name>upload</servlet-name>
+    <servlet-class>com.google.test.UploadServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>compose</servlet-name>
+    <servlet-class>com.google.test.ComposePartsServlet</servlet-class>
+  </servlet>
+ <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\-->
  
-  <servlet-mapping>
-    <servlet-name>Upload</servlet-name>
-    <url-pattern>/upload</url-pattern>
-  </servlet-mapping>
-  
+ 
+ 
   <servlet-mapping>
     <servlet-name>List</servlet-name>
     <url-pattern>/list</url-pattern>
@@ -98,9 +109,34 @@
     <url-pattern>/gcsSize</url-pattern>
   </servlet-mapping>
   
+  <servlet-mapping>
+    <servlet-name>FindInFile</servlet-name>
+    <url-pattern>/findInFile</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ListRegex</servlet-name>
+    <url-pattern>/listRegex</url-pattern>
+  </servlet-mapping>
+  
+  <!--\\\\\\\\\\\\\\\\\\\\\Dingwen's xml\\\\\\\\\\\\\\\-->
+  <servlet-mapping>
+    <servlet-name>upload</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>compose</servlet-name>
+    <url-pattern>/compose</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  <!--\\\\\\\\\\\\\\\\\\\\\\\\Front page\\\\\\\\\\\-->
   
   <welcome-file-list>
-  	<welcome-file>index.jsp</welcome-file>
+  	<welcome-file>index.html</welcome-file>
   </welcome-file-list>
   
   

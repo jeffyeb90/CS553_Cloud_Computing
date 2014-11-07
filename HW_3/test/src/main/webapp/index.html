@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CS553 / HW3</title>
+    <style type="text/css">
+     body {margin: 0;}
+     #container {
+       min-width: 400px;
+       max-width: 500px;
+       margin: 2em auto;
+     }
+     .box {
+       width: 100%;
+       margin: 1.5em 0;
+       padding: 0;
+       height: 1.5em;
+       border-top: 0;
+       border-left: 0;
+       border-bottom: 1px solid black;
+       border-right: 0;
+       font-family: monospace;
+       font-size: 22px;
+     }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <form method="POST"
+            enctype="multipart/form-data"
+            id="upload_form">
+        <input type="file"
+               multiple
+               name="testupload"
+               class="box"
+               id="testfileselector">
+        <select id="nthreads">
+          <option value="1">1</option>
+          <option value="4">4</option>
+        </select> thread(s)
+        <input type="submit"
+               name="files">
+      </form>
+    <!-- <form action="/test" method="get" id="commandForm"><input type="text" id="testbox" class="box" name="cmd" placeholder="type command here..."></form> -->
+       
+       
+       
+       <h4>list all the files</h4>
+        <a href = "/list">list</a>
+        
+        
+        <h4>check if a file exists</h4>
+        <hr>
+          <form action="/check" method="post">
+            <div>File Key:<input type="text" name="filekey"></div>
+            <div><input type="submit" value="Check This File Key"></div>
+          </form>
+        <hr>
+        
+        
+        <h4>find a file and download it</h4>
+        <hr>
+          <form action="/download" method="post">
+            <div>File Key:<input type="text" name="filekey"></div>
+            <div><input type="submit" value="Find(key)"></div>
+          </form>
+        <hr>
+        
+        
+        <h4>remove a file</h4>
+        <hr>
+          <form action="/remove" method="post">
+            <div>File Key:<input type="text" name="filekey"></div>
+            <div><input type="submit" value="Remove"></div>
+          </form>
+        <hr>
+        
+        
+        <h2>Extra credits</h2>
+        
+        <h4>Remove all cache files</h4>
+        <hr>
+          <form action="/removeAllCache" method="post">
+            <div><input type="submit" value="Remove all cache"></div>
+          </form>
+        <hr>
+        
+        <h4>Remove all files</h4> 
+        <hr>
+          <form action="/removeAll" method="post">
+            <div><input type="submit" value="Remove all files"></div>
+          </form>
+        <hr>
+        
+        
+        
+        <h4>Lookup the Cache size</h4>
+        <hr>
+          <form action="/cacheSize" method="post">
+            <div><input type="submit" value="cacheSize"></div>
+          </form>
+        <hr> 
+        
+        <h4>Lookup the GCS size</h4>
+        <hr>
+          <form action="/gcsSize" method="post">
+            <div><input type="submit" value="GcsSize"></div>
+          </form>
+        <hr> 
+        
+        <h4>Find a regex in a file</h4>
+        <hr>
+          <form action="/findInFile" method="post">
+            <div>File Key:<input type="text" name="filekey"></div>
+            <div>Expression:<input type="text" name="regex"></div>
+            <div><input type="submit" value="FindRexInFile"></div>
+          </form>
+        <hr>
+        
+        <h4>List filenames match a regex</h4>
+        <hr>
+          <form action="/listRegex" method="post">
+            <div>Expression:<input type="text" name="regex"></div>
+            <div><input type="submit" value="List files"></div>
+          </form>
+        <hr>
+   
+   
+   
+   
+   
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
+     var unit = 1<<24; // 16MB
+     console.log("unit: " + unit);
+     var form = document.getElementById("upload_form");
+     form.addEventListener("submit", doUpload);
+
+     function printResponse(resp) {
+       console.log(resp);
+     }
+
+     function sequentialUpload(fs, threadname) {
+       //console.log("fs.length: " + fs.length);
+       var data = new FormData();
+       var req = new XMLHttpRequest();
+       var i = 0;
+       var sizeacc = 0;
+
+       if (fs[i].size > unit) {
+         sequentialBigUpload(fs.slice(i));
+         return;
+       }
+
+       data.append(fs[i].name, fs[i]);
+       i++;
+
+       req.open("POST", "/upload");
+       req.onreadystatechange = function () {
+         if (req.readyState==4 && req.status==200) {
+           if (fs.slice(i).length == 0) {
+             console.log("last small file is uploaded");
+           } else {
+             console.log(threadname + ": " + fs.slice(i).length + " files to go.")
+             sequentialUpload(fs.slice(i), threadname);
+           }
+         }
+       };
+       req.send(data);
+     }
+
+     // Note: only uploads the first file in this version.
+     function doUpload(event) {
+       event.preventDefault();
+       var i = 0;
+       var fs = document.getElementById("testfileselector").files;
+       var fs_arr = [].slice.call(fs);
+       fs_arr.sort(function (a, b) {
+         return a.size - b.size; // sort to increasing order
+       });
+
+       var nthreads = document.getElementById("nthreads");
+       switch (nthreads.value) {
+         case '1':
+           sequentialUpload(fs_arr, "thread 1");
+           break;
+         case '4':
+           sequentialUpload(fs_arr.slice(0, 120), "thread 1");
+           sequentialUpload(fs_arr.slice(120, 250), "thread 2");
+           sequentialUpload(fs_arr.slice(250, 380), "thread 3");
+           sequentialUpload(fs_arr.slice(380), "thread 4");
+           break;
+         default:
+           alert("invalid number of threads!");
+           break;
+       }
+     }
+
+     function unitUpload(fname, units, nth_recur) {
+       var data = new FormData();
+       var req = new XMLHttpRequest();
+       data.append('file', units[0], fname + nth_recur);
+       console.log("unitUpload: " + units[0].size + " to be uploaded.");
+       req.open("POST", "/upload");
+       req.onreadystatechange = function () {
+         if (req.readyState==4 && req.status==200) {
+           if (units.length == 1) {// the last unit
+             console.log("last unit of big file " + fname + " is uploaded.");
+             (function () {
+               var req = new XMLHttpRequest();
+               req.open("GET",
+                        "/compose?filename=" + fname
+                        +"&count=" + (new Number(nth_recur+1)).toString());
+               req.onreadystatechange = function () {
+                 printResponse(req.responseText);
+               };
+               req.send();
+             })();
+           } else {
+             console.log("units.slice(1).length: " + units.slice(1).length);
+             unitUpload(fname, units.slice(1), nth_recur + 1);
+           }
+         }
+       };
+       req.send(data);
+     }
+
+     function sequentialBigUpload(fs) {
+       var start = 0;
+       var end = start + unit;
+       var slices = [];
+       var f = fs[0];
+       var s = fs.slice(1);
+
+       while (end < f.size) {
+         slices.push(f.slice(start, end));
+         start = end;
+         end += unit;
+       }
+       slices.push(f.slice(start, f.size));
+
+       unitUpload(f.name, slices, 0);
+
+       if (s.length != 0) {
+         sequentialBigUpload(s);
+       } else {
+         console.log("last big file " + f.name + " is uploaded.");
+       }
+     }
+
+     // split one big upload to multiple small uploads
+     function bigUpload(fbig) {
+       var start = 0;
+       var end = start + unit;
+       var slices = [];
+       var i = 0;
+       var done = 0;
+
+       while (end < fbig.size) {
+         slices.push(fbig.slice(start, end));
+         start = end;
+         end += unit;
+       }
+       slices.push(fbig.slice(start, fbig.size));
+
+       for (i = 0; i < slices.length; i++) {
+         console.log("slice size: " + slices[i].size);
+         (function () {
+           var req = new XMLHttpRequest();
+           var data = new FormData();
+           req.open("POST", "/upload");
+           data.append('file', slices[i], fbig.name + i);
+           req.onreadystatechange = function () {
+             if (req.readyState==4 && req.status==200) {
+               done++;
+               console.log("done: " + done);
+               printResponse(req.responseText);
+               if (done == slices.length) {
+                 (function () {
+                   var req = new XMLHttpRequest();
+                   req.open("GET",
+                            "/compose?filename="+fbig.name
+                            +"&count="+slices.length);
+                   req.onreadystatechange = function () {
+                     printResponse(req.responseText);
+                   };
+                   req.send();
+                 })();
+               }
+             }
+           };
+           req.send(data);
+         })();
+       }
+     }
+
+     // upload in one request
+     function smallUpload(fsmall) {
+       var data = new FormData();
+       data.append(fsmall.name, fsmall);
+       var req = new XMLHttpRequest();
+       req.open("POST", "/upload");
+       req.onreadystatechange = function () {
+         if (req.readyState==4 && req.status==200) {
+           printResponse(req.responseText);
+         }
+       };
+       req.send(data);
+     }
+    </script>
+    
+  </body>
+</html>

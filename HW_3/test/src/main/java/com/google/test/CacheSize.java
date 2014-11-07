@@ -26,11 +26,11 @@ public class CacheSize extends HttpServlet {
     	long elem = stat.getItemCount();
     	double mb = stat.getTotalItemBytes() / 1048576.0;
     	
+		res.setContentType("text/plain");
+   	
     	res.getWriter().println("The are " + elem + "files in the cache, with total size of " + mb + " MegaBytes.\n");
     	
-    	
-
-		
+    	//res.encodeRedirectURL(url)
     	
     }
 }

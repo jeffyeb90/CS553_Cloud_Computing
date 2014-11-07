@@ -42,9 +42,15 @@ public class RemoveAll extends HttpServlet {
 
 		PreparedQuery pq = datastoreService.prepare(q);
 		
+		res.setContentType("text/plain");
+		
 		for(Entity result : pq.asIterable())
 		{
-			GcsFilename gcsName = new GcsFilename("qualified-cacao-745.appspot.com", result.getProperty("GCSkey").toString());
+			//res.getWriter().println("the gcs key is " + result.getKey().getName());
+			
+			
+			GcsFilename gcsName = new GcsFilename("qualified-cacao-745.appspot.com", result.getKey().getName());
+			
 			gcsService.delete(gcsName);
 	
 			keyArray.add(result.getKey());
