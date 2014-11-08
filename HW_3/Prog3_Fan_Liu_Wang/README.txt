@@ -17,7 +17,10 @@ Then, please go under ./source_deploy_maven and run:
 to set everything ready.
 
 Run:
-
 	mvn appengine:devserver
 
 to run this application locally.
+
+This program is also deployed on GAE. User can access it using the link below:
+ 
+	http://qualified-cacao-745.appspot.com/ 
