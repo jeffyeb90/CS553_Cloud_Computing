@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+  <servlet>
+    <servlet-name>List</servlet-name>
+    <servlet-class>com.google.test.List</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>Check</servlet-name>
+    <servlet-class>com.google.test.Check</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>Download</servlet-name>
+    <servlet-class>com.google.test.Download</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>Remove</servlet-name>
+    <servlet-class>com.google.test.Remove</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>RemoveAllCache</servlet-name>
+    <servlet-class>com.google.test.RemoveAllCache</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>RemoveAll</servlet-name>
+    <servlet-class>com.google.test.RemoveAll</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>CacheSize</servlet-name>
+    <servlet-class>com.google.test.CacheSize</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GcsSize</servlet-name>
+    <servlet-class>com.google.test.GcsSize</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>FindInFile</servlet-name>
+    <servlet-class>com.google.test.FindInFile</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>ListRegex</servlet-name>
+    <servlet-class>com.google.test.ListRegex</servlet-class>
+  </servlet>
+  
+<!--\\\\\\\\\\\\Dingwen's servlet mapping\\\\\\\\\\\\\\\\\\\\\\\\\-->
+  <servlet>
+    <servlet-name>upload</servlet-name>
+    <servlet-class>com.google.test.UploadServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>compose</servlet-name>
+    <servlet-class>com.google.test.ComposePartsServlet</servlet-class>
+  </servlet>
+ <!--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\-->
+ 
+ 
+ 
+  <servlet-mapping>
+    <servlet-name>List</servlet-name>
+    <url-pattern>/list</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>Check</servlet-name>
+    <url-pattern>/check</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>Download</servlet-name>
+    <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>Remove</servlet-name>
+    <url-pattern>/remove</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RemoveAllCache</servlet-name>
+    <url-pattern>/removeAllCache</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RemoveAll</servlet-name>
+    <url-pattern>/removeAll</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>CacheSize</servlet-name>
+    <url-pattern>/cacheSize</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GcsSize</servlet-name>
+    <url-pattern>/gcsSize</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>FindInFile</servlet-name>
+    <url-pattern>/findInFile</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ListRegex</servlet-name>
+    <url-pattern>/listRegex</url-pattern>
+  </servlet-mapping>
+  
+  <!--\\\\\\\\\\\\\\\\\\\\\Dingwen's xml\\\\\\\\\\\\\\\-->
+  <servlet-mapping>
+    <servlet-name>upload</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>compose</servlet-name>
+    <url-pattern>/compose</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  <!--\\\\\\\\\\\\\\\\\\\\\\\\Front page\\\\\\\\\\\-->
+  
+  <welcome-file-list>
+  	<welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+  
+  
+</web-app>
